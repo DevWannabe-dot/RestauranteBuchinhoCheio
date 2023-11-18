@@ -5,7 +5,7 @@ Repositório referente à terceira trimestral de AEDS: implementação de um res
 ### Uso
 1. Abra o terminal na pasta raiz (ex.: ~/Downloads);
 2. `tar zxvf com.buchinhocheio.restaurante.tar.gz`
-3. `javac *.java`
+3. `javac com/buchinhocheio/restaurante/*.java`
 4. `java com.buchinhocheio.restaurante.TesteRestaurante`
 
 <hr>
