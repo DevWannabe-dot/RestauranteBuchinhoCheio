@@ -1,3 +1,5 @@
+package restaurante;
+
 public class Comanda {
     private String consumo;
     private double valor;
