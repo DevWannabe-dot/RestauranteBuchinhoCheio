@@ -1,5 +1,8 @@
 package com.buchinhocheio.restaurante;
 
+import java.text.DecimalFormat;
+import java.util.Locale;
+
 public class Comanda {
     private String consumo;
     private double valor;
@@ -15,5 +18,14 @@ public class Comanda {
     }
     public double getvalor() {
         return valor;
+    }
+    public void listarConsumo() {
+        System.out.println(String.format(Locale.getDefault(), "%s\nTotalizando %.2f", this.consumo, DecimalFormat.getCurrencyInstance(Locale.getDefault()).format(this.valor)));
+    }
+    public double calcular10porcento() {
+        return (this.valor * 0.1);
+    }
+    public double dividirConta(int nClientes) {
+        return (this.valor / nClientes);
     }
 }
