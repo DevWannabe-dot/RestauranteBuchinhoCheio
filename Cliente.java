@@ -1,4 +1,4 @@
-package restaurante;
+package com.buchinhocheio.restaurante;
 
 import java.util.Map;
 import java.util.LinkedHashMap;

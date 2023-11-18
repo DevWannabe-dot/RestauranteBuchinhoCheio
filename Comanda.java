@@ -1,4 +1,4 @@
-package restaurante;
+package com.buchinhocheio.restaurante;
 
 public class Comanda {
     private String consumo;

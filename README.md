@@ -3,10 +3,10 @@
 Repositório referente à terceira trimestral de AEDS: implementação de um restaurante em Java.
 
 ### Uso
-1. Crie uma pasta "restaurante", para onde extrairá todo o código-fonte
-2. Abra o terminal na pasta raiz da pasta "restaurante" (ex.: ~/Downloads);
+1. Abra o terminal na pasta raiz (ex.: ~/Downloads);
+2. `tar zxvf com.buchinhocheio.restaurante.tar.gz`
 3. `javac *.java`
-4. `java restaurante.TesteRestaurante`
+4. `java com.buchinhocheio.restaurante.TesteRestaurante`
 
 <hr>
 Por <a href="https://github.com/matheus-telles">@matheus-telles</a> e <a href="https://github.com/devwannabe-dot">@devwannabe-dot</a>
