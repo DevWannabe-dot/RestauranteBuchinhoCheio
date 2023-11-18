@@ -4,6 +4,9 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class Mesa {
     private int numeroMesa;
@@ -22,9 +25,9 @@ public class Mesa {
         this.clientes = clientes;
     }
     public List<Cliente> getClientes() {
-        List<Cliente> clientesCopy = new ArrayList<Cliente>(this.clientes.size());
+        List<Cliente> clientesCopy = (clientes != null ? new ArrayList<Cliente>(this.clientes.size()) : null);
 
-        clientesCopy.addAll(this.clientes);
+        clientesCopy.addAll(clientes);
         
         return clientesCopy;    /* Retorna cópia modificável do objeto, não a referência */
     }
@@ -42,5 +45,12 @@ public class Mesa {
     }
     public void reservar(boolean reserva) {
         if(!this.reserva)   this.reserva = reserva;
+    }
+    public Mesa() {}
+    public Mesa(int numeroMesa) {
+        ZoneId timezoneLocal = ZoneId.of("America/Sao_Paulo");
+
+        this.setNumeroMesa(numeroMesa);
+        this.setData(String.format("%s", LocalDate.now(timezoneLocal).format(DateTimeFormatter.ofPattern("dd-MM-yyyy"))));
     }
 }
