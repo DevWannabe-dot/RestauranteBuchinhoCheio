@@ -30,10 +30,10 @@ public class Restaurante {
     public String getEndereco() {
         return endereco;
     }
-    public Restaurante(String nome, String endereco, List<Mesa> mesas) {
+    public Restaurante(String nome, String endereco) {
         this.nome = nome;
         this.endereco = endereco;
-        this.mesas = mesas;
+        this.mesas.add(new Mesa(1));
     }
     public Restaurante() {}
 }
