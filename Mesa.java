@@ -19,7 +19,7 @@ public class Mesa {
         this.comandasDaMesa = comandasDaMesa;
     }
     public Map<Mesa, Comanda> getComandasDaMesa() {
-        return new LinkedHashMap<>(this.comandasDaMesa);    /* Retorna cópia modificável do objeto, não a referência */
+        return new LinkedHashMap<>(this.comandasDaMesa != null ? this.comandasDaMesa : new LinkedHashMap<>());    /* Retorna cópia modificável do objeto, não a referência */
     }
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;
@@ -27,7 +27,7 @@ public class Mesa {
     public List<Cliente> getClientes() {
         List<Cliente> clientesCopy = (clientes != null ? new ArrayList<Cliente>(this.clientes.size()) : null);
 
-        clientesCopy.addAll(clientes);
+        if(clientesCopy != null) clientesCopy.addAll(clientes);
         
         return clientesCopy;    /* Retorna cópia modificável do objeto, não a referência */
     }
@@ -43,8 +43,15 @@ public class Mesa {
     public String getData() {
         return data;
     }
-    public void reservar(boolean reserva) {
-        if(!this.reserva)   this.reserva = reserva;
+    public boolean reservar(boolean reserva) {
+        if(!this.reserva){
+            this.reserva = reserva;
+            return true; // foi reservada
+        }
+        return false; // não foi reservada
+    }
+    public boolean isReserva() {
+        return reserva;
     }
     public Mesa() {}
     public Mesa(int numeroMesa) {
