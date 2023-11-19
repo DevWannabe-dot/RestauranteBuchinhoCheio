@@ -12,7 +12,7 @@ public class Cliente {
         this.comandasDoCliente = comandasDoCliente;
     }
     public Map<Cliente, Comanda> getComandasDoCliente() {
-        return new LinkedHashMap<>(this.comandasDoCliente); /* Retorna cópia modificável do objeto, não a referência */
+        return new LinkedHashMap<>(comandasDoCliente != null ? comandasDoCliente : new LinkedHashMap<>()); /* Retorna cópia modificável do objeto, não a referência */
     }
     public void setNome(String nome) {
         this.nome = nome;
