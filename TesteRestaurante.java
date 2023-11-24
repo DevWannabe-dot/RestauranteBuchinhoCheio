@@ -2,79 +2,119 @@ package com.buchinhocheio.restaurante;
 
 import java.util.Iterator;
 import java.util.List;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
 
 public class TesteRestaurante {
-    public static final int OPCAO_NEUTRA = 203;
+    /* Constantes */
+    private static final int OPCAO_NEUTRA = 203;    // Impede que a inserção do "0 para cancelar" possa encerrar o programa
+    private static final int TAMANHO_LINHA_MENU = 50;
+    private static final int TAMANHO_LINHA_MESAS = 44 + 2; // Tamanho da string + número formatado em 2 dígitos
+    /* Variáveis de teste */
+    private static Cardapio cardapioRestaurante = new Cardapio();
+
     public static void main(String[] args) {
         System.out.println("Sucesso na compilação.");
 
         /* Início do funcionamento */
-        Scanner esc = new Scanner(System.in);
         Restaurante meuRestaurante = new Restaurante("Buchinho Cheio", "Av. Pres. Antônio Carlos, 6627");
+        Scanner esc = new Scanner(System.in);
+        String leitura;
         int opcao = 0;
+        boolean continuar = false;
 
         do {
             restaurante_imprimirMenuAdmin(meuRestaurante);
-            opcao = esc.nextInt();
-            esc.nextLine(); // Retirar o \n
+            opcao = esc.nextInt(); esc.nextLine(); // Retirar o \n
 
             switch(opcao){
                 case 0:
-                    System.out.print("Confirmar saída? (S/N)\n" +
+                    System.out.print("Confirmar saída? (S/n)\n" +
                                         ">> ");
-                    opcao = esc.nextLine().charAt(0) == 'S' ? 0 : OPCAO_NEUTRA;
+                    leitura = esc.nextLine();
+                    opcao = ((leitura.charAt(0) == 'S' || leitura.charAt(0) == 's') ? 0 : OPCAO_NEUTRA);
                 break;
                 case 1:
                     List<Mesa> mesasCopy = meuRestaurante.getMesas();
                     mesasCopy.add(new Mesa(mesasCopy.size() + 1));
                     meuRestaurante.setMesas(mesasCopy);
+
+                    System.out.println(String.format("<Nova mesa %d criada.>", mesasCopy.get(mesasCopy.size()-1).getNumeroMesa()));
                 break;
                 case 2:
                     restaurante_listarMesas(meuRestaurante);
 
-                    System.out.print("Digite o número da mesa a detalhar (0 para parar): ");
+                    System.out.print("Digite o número da mesa (0 para cancelar): ");
                     opcao = esc.nextInt();
                     if(opcao > 0) restaurante_detalharMesaN(meuRestaurante, opcao); opcao = OPCAO_NEUTRA;
                 break;
                 case 3:
-                    util_escreverCaracteresln('*', 42);
                     restaurante_listarMesas(meuRestaurante);
-                    util_escreverCaracteresln('*', 42);
+                        
+                    System.out.print("Qual o número da mesa onde deseja colocá-l@(s) (0 para cancelar)? ");
+                    opcao = esc.nextInt(); esc.nextLine(); // Retirar o \n
 
-                    System.out.println("Qual o número da mesa onde deseja colocá-l@(s) (0 para parar)? ");
-                    opcao = esc.nextInt();
-                    esc.nextLine();
-
-                    while(opcao > 0 && opcao <= meuRestaurante.getMesas().size()) {                     
-                        if(!(meuRestaurante.getMesas().get(opcao - 1).isReserva())) {
+                    do{           
+                        if(!(meuRestaurante.getMesas().get(opcao - 1).isReserva()) && opcao > 0 && opcao <= meuRestaurante.getMesas().size()) {
                             Cliente novoCliente = new Cliente();
                             List<Cliente> clientes = meuRestaurante.getMesas().get(opcao - 1).getClientes();
-
+                            if(clientes == null) clientes = new ArrayList<Cliente>();
+                        
                             System.out.print("Insira o nome do seu cliente: ");
                             novoCliente.setNome(esc.nextLine());
                             System.out.print("Insira o email do seu cliente: ");
                             novoCliente.setEmail(esc.nextLine());
-
-                            if(clientes == null) clientes = new ArrayList<Cliente>();
+                        
                             clientes.add(novoCliente);
-
                             meuRestaurante.getMesas().get(opcao - 1).setClientes(clientes);
                         } else {
-                            System.out.println("<Mesa indisponível.>");
+                            System.out.print("<Mesa indisponível.>");
                             break;
                         }
+                    
+                        System.out.print("Adicionar mais clientes (S/n)? ");
+                        leitura = esc.nextLine();
+                        continuar = (leitura.charAt(0) == 'S' || leitura.charAt(0) == 's');
+                    } while (continuar);
 
-                        System.out.print("Adicionar mais clientes (0 para parar)? ");
-                        boolean continuar = esc.nextInt() != 0;
-                        esc.nextLine();
-                        if(!continuar) break;
+                    if(!(meuRestaurante.getMesas().get(opcao - 1).isReserva()) && opcao > 0 && opcao <= meuRestaurante.getMesas().size()){
+                        meuRestaurante.getMesas().get(opcao - 1).reservar(true);
                     }
-
-                    if(opcao > 0 && opcao <= meuRestaurante.getMesas().size()) meuRestaurante.getMesas().get(opcao - 1).reservar(true);
                     // a partir de agora, a mesa está reservada (ou não)
+                    if(opcao == 0) opcao = OPCAO_NEUTRA;
+                break;
+                case 4:
+                    // anotar comanda
+                break;
+                case 5:
+                    // ver comanda
+                break;
+                case 6:
+                    // dividir conta
+                break;
+                case 7:
+                    cardapioRestaurante.imprimeCardapio();
+
+                    System.out.print("(1) Adicionar\n" + "(2) Remover\n" + ">> ");
+                    boolean remover = (esc.nextInt() == 2 ? true : false); esc.nextLine(); // Retirar o \n
+
+                    if(remover){
+                        System.out.print("Digite o nome do item a remover: ");
+                        
+                        cardapioRestaurante.removeItem(esc.nextLine());
+                    } else {
+                        System.out.print("Digite o nome do item: ");
+                        String k = esc.nextLine();
+                        System.out.print("Digite o valor do item: ");
+                        Number v = esc.nextDouble();
+
+                        cardapioRestaurante.adicionaItem(k, v);
+                    }
+                break;
+                case 8:
+                    cardapioRestaurante.imprimeCardapio();
                 break;
                 default:
                     System.out.println("<Erro na leitura da opção.>");
@@ -87,23 +127,37 @@ public class TesteRestaurante {
     }
     public static void restaurante_listarMesas(Restaurante r) {
         Iterator<Mesa> it = r.getMesas().iterator();
-
+        
+        util_escreverCaracteresln('*', TAMANHO_LINHA_MESAS);
         while(it.hasNext()) {
             Mesa mesaAtual = it.next();
                        
-            System.out.println(String.format("%s | Mesa de número %d, %s", mesaAtual.getData(), mesaAtual.getNumeroMesa(), (mesaAtual.isReserva() ? "está reservada": "está vazia")));
+            System.out.printf("%s | Mesa de número %s, %s\n", mesaAtual.getData(), new DecimalFormat("00").format(mesaAtual.getNumeroMesa()), (mesaAtual.isReserva() ? "está reservada": "está vazia"));
         }
+        util_escreverCaracteresln('*', TAMANHO_LINHA_MESAS);
     }
     public static void restaurante_imprimirMenuAdmin(Restaurante r) {
-        util_escreverCaracteresln('-', 50);
+        System.out.println("");
+        util_escreverCaracteresln('-', TAMANHO_LINHA_MENU);
         System.out.println("Bem-vind@ ao seu restaurante " + r.getNome() +
                                 "\nSituado em " + r.getEndereco());
-        util_escreverCaracteresln('-', 50);
-        System.out.print("Selecione sua opção:\n" +
-                        "(1) Construir mesa\n" +
-                        "(2) Detalhar mesa\n" +
-                        "(3) Atender cliente\n" +
-                        "(0) Log out\n" +
+        util_escreverCaracteresln('-', TAMANHO_LINHA_MENU);
+        System.out.print("\tSelecione sua opção:\n" +
+                        "Mesas\n" +
+                        "\t(1) Nova mesa\n" +
+                        "\t(2) Ir até mesa\n" +
+                        "\t(3) Atender cliente\n" +
+
+                        "Comandas\n" +
+                        "\t(4) Anotar comanda\n" +
+                        "\t(5) Ver comanda\n" +
+                        "\t(6) Dividir a conta\n" +
+
+                        "Restaurante\n" +
+                        "\t(7) Editar cardápio\n" +
+                        "\t(8) Ver cardápio\n" +
+
+                        "\n\t(0) Log out\n" +
                         ">> ");
     }
     public static void restaurante_detalharMesaN(Restaurante r, int n) {
@@ -118,8 +172,9 @@ public class TesteRestaurante {
         }
 
         if(mesaEncontrada != null) {
-            util_escreverCaracteresln('*', 42);
-            System.out.println(String.format("%s | Mesa de número %d, %s", mesaEncontrada.getData(), mesaEncontrada.getNumeroMesa(), (mesaEncontrada.isReserva() ? "está reservada": "está vazia")));
+            util_escreverCaracteresln('*', TAMANHO_LINHA_MESAS);
+
+            System.out.printf("%s | Mesa de número %s, %s\n", mesaEncontrada.getData(), new DecimalFormat("00").format(mesaEncontrada.getNumeroMesa()), (mesaEncontrada.isReserva() ? "está reservada": "está vazia"));
             
             System.out.println("\tClientes: ");   
             if(mesaEncontrada.getClientes() != null) {
@@ -129,7 +184,7 @@ public class TesteRestaurante {
                 while(it_c.hasNext()) {
                     Cliente clienteAtual = it_c.next();
 
-                    System.out.println(String.format("\t\t%s (%s)", clienteAtual.getNome(), clienteAtual.getEmail()) + (clienteAtual.getComandasDoCliente().size() != 0 ? " fez pedido(s)." : " não fez pedidos."));
+                    System.out.printf("\t\t%s (%s) %s\n", clienteAtual.getNome(), clienteAtual.getEmail(), (clienteAtual.getComandasDoCliente().size() != 0 ? "fez pedido(s)." : "não fez pedidos."));
                 }
             }
             System.out.println("\tComandas: ");
@@ -138,7 +193,15 @@ public class TesteRestaurante {
                     System.out.println(entry);
                 }
             }
+
+            if(mesaEncontrada.isReserva()) restaurante_imprimirMenuMesa();
         }
+    }
+    public static void restaurante_imprimirMenuMesa() {
+        System.out.println("(1) Anotar comanda\n" +
+                            "(2) Listar consumo\n" + 
+                            "(3) Calcular 10%\n" +
+                            "(4) Dividir conta");
     }
     public static void util_escreverCaracteresln(char caracter, int tam) {
         while (tam != 0){
