@@ -16,11 +16,11 @@ public class Comanda {
     public void setValor(double valor) {
         this.valor = valor;
     }
-    public double getvalor() {
+    public double getValor() {
         return valor;
     }
     public void listarConsumo() {
-        System.out.println(String.format(Locale.forLanguageTag("pt-BR"), "%s\nTotalizando %.2f", this.consumo, DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(this.valor)));
+        System.out.printf("%s\n> Totalizando %.2f", this.consumo, DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(this.valor));
     }
     public double calcular10porcento() {
         return (this.valor * 0.1);
