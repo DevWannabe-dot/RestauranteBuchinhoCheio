@@ -2,8 +2,6 @@ package com.buchinhocheio.restaurante;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.LinkedHashMap;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
@@ -13,13 +11,18 @@ public class Mesa {
     private String data;
     private boolean reserva;
     private List<Cliente> clientes;
-    private Map<Mesa, Comanda> comandasDaMesa;
+    private Comanda comanda;
 
-    public void setComandasDaMesa(Map<Mesa, Comanda> comandasDaMesa) {
-        this.comandasDaMesa = comandasDaMesa;
+    public void setComanda(Comanda comanda) {
+        this.comanda = comanda;
     }
-    public Map<Mesa, Comanda> getComandasDaMesa() {
-        return new LinkedHashMap<>(this.comandasDaMesa != null ? this.comandasDaMesa : new LinkedHashMap<>());    /* Retorna cópia modificável do objeto, não a referência */
+    public Comanda getComanda() {
+        Comanda comandaCopy = new Comanda();
+        
+        comandaCopy.setConsumo(comanda != null ? comanda.getConsumo() : null);
+        comandaCopy.setValor(comanda != null ? comanda.getValor() : 0);
+
+        return new Comanda(); /* Retorna cópia modificável do objeto */
     }
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;

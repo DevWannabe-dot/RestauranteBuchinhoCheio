@@ -1,18 +1,20 @@
 package com.buchinhocheio.restaurante;
 
-import java.util.Map;
-import java.util.LinkedHashMap;
-
 public class Cliente {
     private String nome;
     private String email;
-    private Map<Cliente, Comanda> comandasDoCliente;
+    private Comanda comanda;
 
-    public void setComandasDoCliente(Map<Cliente, Comanda> comandasDoCliente) {
-        this.comandasDoCliente = comandasDoCliente;
+    public void setComanda(Comanda comanda) {
+        this.comanda = comanda;
     }
-    public Map<Cliente, Comanda> getComandasDoCliente() {
-        return new LinkedHashMap<>(comandasDoCliente != null ? comandasDoCliente : new LinkedHashMap<>()); /* Retorna cópia modificável do objeto, não a referência */
+    public Comanda getComanda() {
+        Comanda comandaCopy = new Comanda();
+        
+        comandaCopy.setConsumo(comanda != null ? comanda.getConsumo() : null);
+        comandaCopy.setValor(comanda != null ? comanda.getValor() : 0);
+
+        return new Comanda(); /* Retorna cópia modificável do objeto */
     }
     public void setNome(String nome) {
         this.nome = nome;
