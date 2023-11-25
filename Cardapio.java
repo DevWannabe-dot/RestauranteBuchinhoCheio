@@ -19,8 +19,15 @@ public class Cardapio {
     }
     public void imprimeCardapio() {
         for(Map.Entry<String, Number> entry : getItem().entrySet()) {
-            System.out.println(entry.getKey() + ": " + DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(entry.getValue()));
+            System.out.println(entry.getKey() + " " + DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(entry.getValue()));
         }
+    }
+    public int cardapio_acharItem(String query) {
+        for(Map.Entry<String, Number> entry : getItem().entrySet()) {
+            if(entry.getKey().toString() == query) return (int)entry.getValue();
+        }
+        
+        return 0;
     }
     public Cardapio() {
         this.itens = new TreeMap<>();
