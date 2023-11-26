@@ -168,8 +168,10 @@ public class TesteRestaurante {
             
             System.out.println("\tClientes: ");   
             if(mesaEncontrada.getClientes() != null) mesa_listarClientes(mesaEncontrada);
-            System.out.println("\tComanda: ");
-            if(mesaEncontrada.getComanda() != null) mesaEncontrada.getComanda().listarConsumo();
+            System.out.println("\tComanda de comida: ");
+            if(mesaEncontrada.getComandaComida() != null) mesaEncontrada.getComandaComida().listarConsumo();
+            System.out.println("\tComanda de bebida: ");
+            if(mesaEncontrada.getComandaBebida() != null) mesaEncontrada.getComandaBebida().listarConsumo();
 
             if(mesaEncontrada.isReserva()) {
                 boolean ehMesa;
@@ -192,6 +194,8 @@ public class TesteRestaurante {
                         String donoDaComanda = esc.nextLine();
                         ehMesa = (donoDaComanda.charAt(0) == (NumberFormat.getInstance().format(mesaEncontrada.getNumeroMesa()).charAt(0)));
                         // Busca o primeiro dígito da entrada no primeiro dígito do número da mesa, permitindo a leitura em String tanto para cliente quanto para mesa
+                        System.out.print("Comanda de comida ou bebida (C/b)? ");
+                        boolean ehComida = esc.nextLine().charAt(0) == 'C';
 
                         do{
                             cardapioRestaurante.imprimeCardapio();
@@ -201,23 +205,43 @@ public class TesteRestaurante {
                             String consumo = esc.nextLine();
                             System.out.print("Quantidade: ");
                             int qtd = esc.nextInt(); esc.nextLine(); // Retirar o \n
+                            
+                            if(ehComida){
+                                if(ehMesa){
+                                    ComandaComida c = mesaEncontrada.getComandaComida();
+                                    String tmp = c.getConsumo();
+                                    c.setConsumo(tmp != null ? tmp.concat(String.format("\t\t%s x%d\n", consumo, qtd)) : (String.format("\t\t%s x%d\n", consumo, qtd)));
+                                    c.setValor(c.getValor() + (qtd * cardapioRestaurante.cardapio_acharItemPegarValor(consumo)));
 
-                            if(ehMesa){
-                                Comanda c = mesaEncontrada.getComanda();
-                                String tmp = c.getConsumo();
-                                c.setConsumo(tmp != null ? tmp.concat(String.format("\t\t%s x%d\n", consumo, qtd)) : (String.format("\t\t%s x%d\n", consumo, qtd)));
-                                c.setValor(c.getValor() + (qtd * cardapioRestaurante.cardapio_acharItemPegarValor(consumo)));
-                                
-                                mesaEncontrada.setComanda(c);
+                                    mesaEncontrada.setComandaComida(c);
+                                } else {
+                                    Cliente clienteEncontrado = mesa_acharCliente(mesaEncontrada, donoDaComanda);
+
+                                    ComandaComida c = clienteEncontrado.getComandaComida();
+                                    String tmp = c.getConsumo();
+                                    c.setConsumo(tmp != null ? tmp.concat(String.format("\t\t%s x%d\n", consumo, qtd)) : (String.format("\t\t%s x%d\n", consumo, qtd)));
+                                    c.setValor(c.getValor() + (qtd * cardapioRestaurante.cardapio_acharItemPegarValor(consumo)));
+
+                                    clienteEncontrado.setComandaComida(c);
+                                }
                             } else {
-                                Cliente clienteEncontrado = mesa_acharCliente(mesaEncontrada, donoDaComanda);
+                                if(ehMesa){
+                                    ComandaBebida c = mesaEncontrada.getComandaBebida();
+                                    String tmp = c.getConsumo();
+                                    c.setConsumo(tmp != null ? tmp.concat(String.format("\t\t%s x%d\n", consumo, qtd)) : (String.format("\t\t%s x%d\n", consumo, qtd)));
+                                    c.setValor(c.getValor() + (qtd * cardapioRestaurante.cardapio_acharItemPegarValor(consumo)));
 
-                                Comanda c = clienteEncontrado.getComanda();
-                                String tmp = c.getConsumo();
-                                c.setConsumo(tmp != null ? tmp.concat(String.format("\t\t%s x%d\n", consumo, qtd)) : (String.format("\t\t%s x%d\n", consumo, qtd)));
-                                c.setValor(c.getValor() + (qtd * cardapioRestaurante.cardapio_acharItemPegarValor(consumo)));
-                                
-                                clienteEncontrado.setComanda(c);
+                                    mesaEncontrada.setComandaBebida(c);
+                                } else {
+                                    Cliente clienteEncontrado = mesa_acharCliente(mesaEncontrada, donoDaComanda);
+
+                                    ComandaBebida c = clienteEncontrado.getComandaBebida();
+                                    String tmp = c.getConsumo();
+                                    c.setConsumo(tmp != null ? tmp.concat(String.format("\t\t%s x%d\n", consumo, qtd)) : (String.format("\t\t%s x%d\n", consumo, qtd)));
+                                    c.setValor(c.getValor() + (qtd * cardapioRestaurante.cardapio_acharItemPegarValor(consumo)));
+
+                                    clienteEncontrado.setComandaBebida(c);
+                                }
                             }
 
                             System.out.print("Mais itens (S/n)? ");
@@ -226,11 +250,12 @@ public class TesteRestaurante {
                         } while(continuar.startsWith("S") || continuar.startsWith("s"));
                     break;
                     case 2:
-                        System.out.println("10% da comanda desta mesa = " + mesaEncontrada.getComanda().calcular10porcento());
+                        System.out.println("10% das comandas desta mesa = " + mesaEncontrada.getComandaComida().calcular10porcento() + mesaEncontrada.getComandaBebida().calcular10porcento());
                     break;
                     case 3:
                         System.out.print("Quantas pessoas irão pagar? ");
-                        System.out.print("O total por pessoa será " + mesaEncontrada.getComanda().dividirConta(esc.nextInt()));
+                        int totalPessoas = esc.nextInt(); esc.nextLine();
+                        System.out.print("O total por pessoa será " + (mesaEncontrada.getComandaComida().dividirConta(totalPessoas) + mesaEncontrada.getComandaBebida().dividirConta(totalPessoas)));
                     break;
                     default:
                         System.out.println("<Erro na leitura da opção.>");
@@ -250,11 +275,12 @@ public class TesteRestaurante {
 
         while(it_c.hasNext()) {
             Cliente clienteAtual = it_c.next();
-            System.out.printf("\t\t%s (%s) %s\n", clienteAtual.getNome(), clienteAtual.getEmail(), (clienteAtual.getComanda().getValor() > 0 ? "fez o(s) pedido(s):" : "não fez pedidos."));
+            System.out.printf("\t\t%s (%s) %s\n", clienteAtual.getNome(), clienteAtual.getEmail(), ((clienteAtual.getComandaComida().getValor() > 0 || clienteAtual.getComandaBebida().getValor() > 0) ? "fez o(s) pedido(s):" : "não fez pedidos."));
             
-            if(clienteAtual.getComanda().getValor() != 1) {
-                clienteAtual.getComanda().listarConsumo();
-            }
+            System.out.println("\t\t* Comanda de comida:\n");
+            if(clienteAtual.getComandaComida().getValor() > 0) clienteAtual.getComandaComida().listarConsumo();
+            System.out.println("\t\t* Comanda de bebida:\n");
+            if(clienteAtual.getComandaBebida().getValor() > 0) clienteAtual.getComandaBebida().listarConsumo();
         }
     }
     public static Cliente mesa_acharCliente(Mesa m, String query) {

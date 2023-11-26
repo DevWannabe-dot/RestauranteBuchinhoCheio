@@ -3,7 +3,7 @@ package com.buchinhocheio.restaurante;
 import java.text.DecimalFormat;
 import java.util.Locale;
 
-public class Comanda {
+public abstract class Comanda {
     private String consumo;
     private double valor;
 

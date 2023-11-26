@@ -11,16 +11,28 @@ public class Mesa {
     private String data;
     private boolean reserva;
     private List<Cliente> clientes;
-    private Comanda comanda;
+    private ComandaComida comanda_comida;
+    private ComandaBebida comanda_bebida;
 
-    public void setComanda(Comanda comanda) {
-        this.comanda = comanda;
+    public void setComandaComida(ComandaComida comanda_comida) {
+        this.comanda_comida = comanda_comida;
     }
-    public Comanda getComanda() {
-        Comanda comandaCopy = new Comanda();
+    public ComandaComida getComandaComida() {
+        ComandaComida comandaCopy = new ComandaComida();
         
-        comandaCopy.setConsumo(comanda != null ? comanda.getConsumo() : null);
-        comandaCopy.setValor(comanda != null ? comanda.getValor() : 0);
+        comandaCopy.setConsumo(comanda_comida != null ? comanda_comida.getConsumo() : null);
+        comandaCopy.setValor(comanda_comida != null ? comanda_comida.getValor() : 0);
+
+        return comandaCopy; /* Retorna cópia modificável do objeto */
+    }
+    public void setComandaBebida(ComandaBebida comanda_bebida) {
+        this.comanda_bebida = comanda_bebida;
+    }
+    public ComandaBebida getComandaBebida() {
+        ComandaBebida comandaCopy = new ComandaBebida();
+        
+        comandaCopy.setConsumo(comanda_bebida != null ? comanda_bebida.getConsumo() : null);
+        comandaCopy.setValor(comanda_bebida != null ? comanda_bebida.getValor() : 0);
 
         return comandaCopy; /* Retorna cópia modificável do objeto */
     }
