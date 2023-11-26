@@ -22,7 +22,7 @@ public class Mesa {
         comandaCopy.setConsumo(comanda != null ? comanda.getConsumo() : null);
         comandaCopy.setValor(comanda != null ? comanda.getValor() : 0);
 
-        return new Comanda(); /* Retorna cópia modificável do objeto */
+        return comandaCopy; /* Retorna cópia modificável do objeto */
     }
     public void setClientes(List<Cliente> clientes) {
         this.clientes = clientes;

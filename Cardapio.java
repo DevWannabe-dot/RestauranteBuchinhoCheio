@@ -18,13 +18,16 @@ public class Cardapio {
         return itens;
     }
     public void imprimeCardapio() {
+        System.out.println("\t\tCARDAPIO");
         for(Map.Entry<String, Number> entry : getItem().entrySet()) {
             System.out.println(entry.getKey() + " " + DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(entry.getValue()));
         }
     }
-    public int cardapio_acharItem(String query) {
+    public double cardapio_acharItemPegarValor(String query) {
         for(Map.Entry<String, Number> entry : getItem().entrySet()) {
-            if(entry.getKey().toString() == query) return (int)entry.getValue();
+            if(entry.getKey().equals(query)) {
+                return (double) entry.getValue();
+            }
         }
         
         return 0;

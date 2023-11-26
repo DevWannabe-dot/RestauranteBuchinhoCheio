@@ -20,7 +20,11 @@ public class Comanda {
         return valor;
     }
     public void listarConsumo() {
-        System.out.printf("%s\n> Totalizando %.2f", this.consumo, DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(this.valor));
+        if(this.consumo == null || this.valor == 0) {
+            System.out.printf("\t\t%s\n\t\t> Totalizando %s\n", this.consumo, this.valor);
+        } else {
+            System.out.printf("%s\n\t\t> Totalizando %s\n", this.consumo, DecimalFormat.getCurrencyInstance(Locale.forLanguageTag("pt-BR")).format(this.valor));
+        }
     }
     public double calcular10porcento() {
         return (this.valor * 0.1);

@@ -14,7 +14,7 @@ public class Cliente {
         comandaCopy.setConsumo(comanda != null ? comanda.getConsumo() : null);
         comandaCopy.setValor(comanda != null ? comanda.getValor() : 0);
 
-        return new Comanda(); /* Retorna cópia modificável do objeto */
+        return comandaCopy; /* Retorna cópia modificável do objeto */
     }
     public void setNome(String nome) {
         this.nome = nome;
