@@ -9,9 +9,9 @@ import java.util.Scanner;
 
 public class TesteRestaurante {
     /* Constantes */
-    private static final int OPCAO_NEUTRA = 203;    // Impede que a inserção do "0 para cancelar" possa encerrar o programa
-    private static final int TAMANHO_LINHA_MENU = 50;
-    private static final int TAMANHO_LINHA_MESAS = 44 + 2; // Tamanho da string + número formatado em 2 dígitos
+    private static final int OPCAO_NEUTRA = 203;            // Impede que a inserção do "0 para cancelar" possa encerrar o programa
+    private static final int TAMANHO_LINHA_MENU = 50;       // Tamanho arbitrário
+    private static final int TAMANHO_LINHA_MESAS = 44 + 2;  // Tamanho da string + número formatado em 2 dígitos
     /* Variáveis de teste */
     private static Cardapio cardapioRestaurante = new Cardapio();
 
